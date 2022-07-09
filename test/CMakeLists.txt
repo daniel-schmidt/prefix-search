@@ -17,7 +17,7 @@ target_include_directories(Tests PRIVATE ../src)
 
 target_link_libraries(
   Tests
-  gtest_main
+  gmock_main
   prefix-search
 )
 
