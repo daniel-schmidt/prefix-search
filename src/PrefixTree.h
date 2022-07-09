@@ -21,7 +21,7 @@ namespace TreeSearch
         NodeContainer children;
     };
 
-    NodeContainer VecToTree(std::vector<std::string> const & wordList, size_t numProcs);
+    [[nodiscard]] NodeContainer VecToTree(std::vector<std::string> const & wordList, size_t numProcs);
 
-    std::vector<std::string> TreeToVec(std::string prefix, NodeContainer const & tree);
+    [[nodiscard]] std::vector<std::string> TreeToVec(std::string prefix, NodeContainer const & tree);
 }
