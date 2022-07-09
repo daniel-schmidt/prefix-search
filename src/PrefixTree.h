@@ -23,5 +23,5 @@ namespace TreeSearch
 
     [[nodiscard]] NodeContainer VecToTree(std::vector<std::string> const & wordList, size_t numProcs);
 
-    [[nodiscard]] std::vector<std::string> TreeToVec(std::string prefix, NodeContainer const & tree);
+    [[nodiscard]] std::vector<std::string> TreeToVec(std::string_view prefix, NodeContainer const & tree);
 }

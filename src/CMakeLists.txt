@@ -1,4 +1,10 @@
-add_library(prefix-search Find.cpp PrefixTree.cpp StandardAlgorithms.cpp)
+add_library(
+    prefix-search 
+    Find.cpp 
+    PrefixTree.cpp 
+    SearchTree.cpp
+    StandardAlgorithms.cpp
+    )
 
 target_include_directories(prefix-search PRIVATE .)
 

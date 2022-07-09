@@ -54,7 +54,7 @@ namespace TreeSearch
         // Visitor for depth-first search, collecting all words at the leaf nodes.
         struct Serialize
         {
-            Serialize(std::string const & globalPrefix)
+            Serialize(std::string_view globalPrefix)
             : curWord(globalPrefix)
             {}
 
@@ -123,7 +123,7 @@ namespace TreeSearch
         return tree;
     }
 
-    std::vector<std::string> TreeToVec(std::string prefix, NodeContainer const & tree)
+    std::vector<std::string> TreeToVec(std::string_view prefix, NodeContainer const & tree)
     {
         Serialize serialize{ prefix };
         DepthFirstVisit(tree, serialize);

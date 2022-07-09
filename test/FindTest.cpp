@@ -1,5 +1,4 @@
-#include "Find.h"
-#include "PrefixTree.h"
+#include "SearchTree.h"
 
 #include <gmock/gmock.h>
 #include <vector>
@@ -10,12 +9,12 @@ using ::testing::ContainerEq;
 
 TEST(FindTests, ReturnsMatchingSubtree) 
 {
+    constexpr int num_procs = 1;
     std::vector<std::string> input{"Anananas", "Bratwurst", "Clementine", "Baum", "Bein", "Banane"};
     std::string prefix = "Ba";
     
-    NodeContainer const root = VecToTree(input, 1);
-    NodeContainer const result_subtree = Find(prefix, root, 1);
-    std::vector<std::string> result = TreeToVec(prefix, result_subtree);
+    SearchTree underTest{input, num_procs};
+    std::vector<std::string> result = underTest.Find(prefix);
 
     EXPECT_THAT(result, ContainerEq(std::vector<std::string>{"Baum", "Banane"}));
 }
