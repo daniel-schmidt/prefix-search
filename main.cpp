@@ -5,34 +5,13 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <fstream>
 #include <iterator>
-#include <random>
 #include <string>
 #include <vector>
 
 namespace
 {
-    // Generation of the input: returns a randomly ordered list of all possible combinations of the
-    // letters in the <alphabet> of a fixed <wordLength>.
-    std::vector<std::string> GenerateWordList(std::string_view alphabet, size_t wordLength)
-    {        
-        size_t const listLength = std::pow(alphabet.size(), wordLength);
-        std::vector<std::string> wordList(listLength);
-        for(size_t i = 0; i < listLength; i++) {
-            size_t remainder = i;
-            for(size_t j = 0; j < wordLength; j++) {
-                size_t const letterIndex = remainder % alphabet.size();
-                wordList[i] += alphabet[letterIndex];
-                remainder = remainder / alphabet.size();
-            }
-        }
-        std::random_device rd;
-        std::mt19937 generator(rd());
-        std::shuffle(wordList.begin(), wordList.end(), generator);
-        return wordList;
-    }
-
-
     // Small stop watch class, returning the elapsed time since the last call in seconds.
     class Timer
     {
@@ -52,20 +31,20 @@ namespace
 }
 
 
-int main(int, char**) 
-{
-    std::string const alphabet{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-    constexpr size_t wordLength = 5;
-    
-    Timer timer{};
-    std::vector<std::string> wordList = GenerateWordList(alphabet, wordLength);
-    std::cout << "Finished generating word list after " << timer.GetElapsedTime() << " s." << std::endl;
+int main(int argc, char** argv) 
+{   
+    std::ifstream input_file{argv[1]};
+    std::string line;
+    std::vector<std::string> wordList = {};
+    while(std::getline(input_file, line)) {
+        wordList.push_back(std::move(line));
+    }
     
     std::cout << "\nEnter prefix to search by copy_if: ";
     std::string userInput;
     std::cin >> userInput;
     
-    timer.GetElapsedTime();
+    Timer timer{};
     std::vector<std::string> matches = StandardAlgorithms::PrefixSearchCopyIf(wordList, userInput);
     std::cout << "Matching words: ";
     std::copy(matches.begin(), matches.end(), std::ostream_iterator<std::string>(std::cout, " "));
