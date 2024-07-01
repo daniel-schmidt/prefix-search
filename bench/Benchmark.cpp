@@ -12,7 +12,7 @@ namespace
     // letters in the <alphabet> of a fixed <wordLength>.
     std::vector<std::string> GenerateWordList(std::string_view alphabet, size_t wordLength)
     {        
-        size_t const listLength = std::pow(alphabet.size(), wordLength);
+        auto const listLength = static_cast<size_t>(std::pow(alphabet.size(), wordLength));
         std::vector<std::string> wordList(listLength);
         for(size_t i = 0; i < listLength; i++) {
             size_t remainder = i;
@@ -24,7 +24,7 @@ namespace
         }
         std::random_device rd;
         std::mt19937 generator(rd());
-        std::shuffle(wordList.begin(), wordList.end(), generator);
+        std::ranges::shuffle(wordList, generator);
         return wordList;
     }
 

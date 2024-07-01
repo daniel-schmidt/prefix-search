@@ -17,7 +17,7 @@ namespace TreeSearch
             }
             char firstChar = word[0];
 
-            auto existingNodeIt = std::find_if(tree.begin(), tree.end(), [&](Node const & node){ 
+            auto existingNodeIt = std::ranges::find_if(tree, [&](Node const & node){ 
                 return node.content == firstChar;
             });
 
@@ -29,7 +29,7 @@ namespace TreeSearch
             else {
                 AddWord(existingNodeIt->children, word.substr(1));
             }
-        };
+        }
 
 
         // Creates a subtree containing all words starting with some specific letters, depending on the <taskID>.
@@ -38,7 +38,7 @@ namespace TreeSearch
             NodeContainer operator()(size_t taskID) const
             {
                 NodeContainer subTree{};
-                std::for_each(wordList.cbegin(), wordList.cend(), [&](std::string_view word) {
+                std::ranges::for_each(wordList, [&](std::string_view word) {
                     if(!word.empty() && (word[0] - 'A') % numTasks == taskID) {
                         AddWord(subTree, word);
                     }
@@ -54,7 +54,7 @@ namespace TreeSearch
         // Visitor for depth-first search, collecting all words at the leaf nodes.
         struct Serialize
         {
-            Serialize(std::string_view globalPrefix)
+            explicit Serialize(std::string_view globalPrefix)
             : curWord(globalPrefix)
             {}
 
@@ -106,12 +106,12 @@ namespace TreeSearch
         }
 
         std::vector<std::future<NodeContainer>> subtrees;
-        std::transform(tasks.begin(), tasks.end(), std::back_inserter(subtrees), [](auto & task) {
+        std::ranges::transform(tasks, std::back_inserter(subtrees), [](auto & task) {
             return task.get_future();
         });
 
         for(size_t i = 0; i < numProcs; i++) {
-            std::thread t1(std::move(tasks[i]), i);
+            std::jthread t1(std::move(tasks[i]), i);
             t1.detach();
         }
 

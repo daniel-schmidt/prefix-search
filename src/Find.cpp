@@ -10,7 +10,7 @@ namespace TreeSearch
 {
     struct GetMatchingChildren
     {
-        NodeContainer const * operator()()
+        NodeContainer const * operator()() const
         {
             for(size_t i = taskID; i < currentLevel.size(); i += numTasks) {
                 if(currentLevel[i].content == charToFind) {
@@ -37,12 +37,12 @@ namespace TreeSearch
             }
 
             std::vector<std::future<NodeContainer const *>> possibleNextLevels;
-            std::transform(tasks.begin(), tasks.end(), std::back_inserter(possibleNextLevels), [](auto & task) {
+            std::ranges::transform(tasks, std::back_inserter(possibleNextLevels), [](auto & task) {
                 return task.get_future();
             });
 
             for(auto & task : tasks) {
-                std::thread t{std::move(task)};
+                std::jthread t{std::move(task)};
                 t.detach();
             }
             

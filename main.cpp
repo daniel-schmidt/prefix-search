@@ -39,6 +39,7 @@ int main(int argc, char** argv)
     while(std::getline(input_file, line)) {
         wordList.push_back(std::move(line));
     }
+    std::ranges::copy(wordList, std::ostream_iterator<std::string>(std::cout, " "));
     
     std::cout << "\nEnter prefix to search by copy_if: ";
     std::string userInput;
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
     Timer timer{};
     std::vector<std::string> matches = StandardAlgorithms::PrefixSearchCopyIf(wordList, userInput);
     std::cout << "Matching words: ";
-    std::copy(matches.begin(), matches.end(), std::ostream_iterator<std::string>(std::cout, " "));
+    std::ranges::copy(matches, std::ostream_iterator<std::string>(std::cout, " "));
     std::cout << std::endl;
     std::cout << "Found the result by copy_if after " << timer.GetElapsedTime() << " s." << std::endl;
 
@@ -65,7 +66,7 @@ int main(int argc, char** argv)
         if(!tree.empty()) {
             matches = TreeSearch::TreeToVec(oldPrefix + userInput, tree);
             std::cout << "Matching words: ";
-            std::copy(matches.begin(), matches.end(), std::ostream_iterator<std::string>(std::cout, " "));
+            std::ranges::copy(matches, std::ostream_iterator<std::string>(std::cout, " "));
             std::cout << std::endl;
         }
         else {
